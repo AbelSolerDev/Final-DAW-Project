@@ -22,3 +22,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::get('/venta', 'VentaController@index')->name('venta.index');
+Route::get('/quienes-somos', 'QuienesSomosController@index')->name('quienes-somos.index');
+Route::get('/contacto', 'ContactoController@index')->name('contacto.index');
