@@ -20,7 +20,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/')}}">
                     {{ config('app.name', 'Mobil-Homes') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -88,11 +88,7 @@
 
         <main class="py-4">
             @yield('content')
-            <div class="text-center" style="position: relative;">
-                <img src="{{ asset('imagenes/portada/imagenPortada2Retocada.jpg') }}" class="img-fluid rounded mx-auto d-block" alt="imagenPortada" style="max-width: 70%;">
-                <h1 style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 6rem;">Bienvenido</h1>
-                <!--<h3 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 3rem;">Encuentra el mejor hogar para vivir</h3>-->
-            </div>
+
         </main>
 
         <footer class="footer ">
