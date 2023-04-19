@@ -31,19 +31,19 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li>
-                            <a class="nav-link" href="{{ route('venta.index') }}">Venta</a>
+                            <a class="nav-link" href="{{ route('sale.index') }}">Sale</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{ route('quienes-somos.index') }}">Quienes Somos</a>
+                            <a class="nav-link" href="{{ route('about-us.index') }}">About Us</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{ route('contacto.index') }}">Contacto</a>
+                            <a class="nav-link" href="{{ route('contact.index') }}">Contact</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="#">Mi Cuenta</a> <!-- Se verá, en el caso que haga login un usuario -->
+                            <a class="nav-link" href="#">My Account</a> <!-- Se verá, en el caso que haga login un usuario -->
                         </li>
                         <li>
-                            <a class="nav-link" href="#">Administración</a> <!-- Se verá, en el caso que haga login el administrador -->
+                            <a class="nav-link" href="#">Administration</a> <!-- Se verá, en el caso que haga login el administrador -->
                         </li>
                     </ul>
 

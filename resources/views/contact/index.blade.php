@@ -10,7 +10,7 @@
  
     <div class="text-center">
         <form action="#" method="post">
-            Campos del formulario
+            Form fields
         </form>
     </div>
 @endsection
