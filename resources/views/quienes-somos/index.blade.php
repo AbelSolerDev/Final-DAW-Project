@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="text-center">
-        <h1> Quiénes Somos</h1> 
-        <p>Somos una empresa dedicada a la venta de mobil-homes y casas prefabricadas.</p>
+        <h1>{{$title}}</h1> 
+        <p>{{$description}}</p>
     </div>
 
 @endsection
