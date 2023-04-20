@@ -8,13 +8,26 @@ use Illuminate\Support\Facades\Storage;
 class AdminController extends Controller
 {
     public function index ()
-    {
-        return view('admin.index');
+    {   
+        $title = 'Administration';
+        $description = 'Here you can manage your business by publishing new mobilHomes 
+        or editing or deleting existing ones, you can also review registered users.';
+        return view('admin.index', compact('title', 'description'));
     }
 
+    public function viewMobilHome()
+    {
+        return view('admin.view-mobilhome');
+    }
+    
     public function createMobilHome()
     {
         return view('admin.new-mobilhome');
+    }
+    
+    public function viewUser()
+    {
+        return view('admin.view-user');
     }
 
     public function createUser()

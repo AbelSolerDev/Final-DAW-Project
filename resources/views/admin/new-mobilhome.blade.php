@@ -70,6 +70,11 @@
                                     {{ __('Add Mobil Home') }}
                                 </button>
                             </div>
+                            <div class="col-md-12">
+                                <a href="{{ route('admin.view-mobilhome') }}" class="btn btn-success button-border">
+                                    back
+                                </a>
+                            </div>
                         </div>
 
                     </form>
