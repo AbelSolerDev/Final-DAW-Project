@@ -39,12 +39,7 @@
                         <li>
                             <a class="nav-link" href="{{ route('contact.index') }}">Contact</a>
                         </li>
-                        <li>
-                            <a class="nav-link" href="#">My Account</a> <!-- Se verá, en el caso que haga login un usuario -->
-                        </li>
-                        <li>
-                            <a class="nav-link" href="#">Administration</a> <!-- Se verá, en el caso que haga login el administrador -->
-                        </li>
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -69,6 +64,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">My Account</a> <!-- Se verá, en el caso que haga login un usuario -->
+                                <a class="dropdown-item" href="{{ route('admin.index') }}">Administration</a> <!-- Se verá, en el caso que haga login el administrador -->
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -91,11 +89,13 @@
 
         </main>
 
-        <footer class="footer ">
+        <footer class="footer bg-light fixed-bottom" style="min-height: 2%;">
             <div class="container text-center">
                 <span class="text-muted">Abel Soler Fernández © {{ date('Y') }} {{ config('app.name') }} ~ IlernaOnline</span>
             </div>
         </footer>
+
+
     </div>
 </body>
 </html>

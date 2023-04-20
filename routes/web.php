@@ -38,6 +38,10 @@ Route::get('/', function () {
 Route::get('sale', [\App\Http\Controllers\SaleController::class, 'index'])->name('sale.index');
 
 
+Route::get('admin', [\App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
+Route::get('admin/new-mobilhome', [\App\Http\Controllers\AdminController::class, 'createMobilHome'])->name('admin.createMobilHome');
+Route::get('admin/new-user', [\App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.createUser');
+
 /*Route::get('/quienes-somos', function () {
     return view('quienes-somos.index');
 })->name('quienes-somos.index');*/
@@ -50,3 +54,12 @@ Route::get('about-us', [\App\Http\Controllers\AboutUsController::class, 'index']
 //Route::get('/contacto', 'ContactoController@index')->name('contacto.index');
 Route::get('contact', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact.index');
 
+/*
+Si el usuario esta registrado podrá ver el contenido
+middleware('auth')
+        Route::get('profile', function () {
+            // Only authenticated users may enter...
+        })->middleware('auth.basic');
+*/
+
+Route::post('/admin/new-mobilhome', 'AdminController@storeMobilHome')->name('admin.storeMobilHome');
