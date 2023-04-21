@@ -5,7 +5,7 @@
     <div class="text-center">
         <h1>{{ $title }}</h1>
     </div>
-    <div class="container my-5 text-center">
+    <div class="container my-2 text-center">
         <p>{{ $description }}</p>
     </div>
 
