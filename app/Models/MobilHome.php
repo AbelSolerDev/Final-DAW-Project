@@ -43,10 +43,5 @@ class MobilHome extends Model
     {
         return $this->hasMany(UserFavorite::class);
     }
-
-    public function administrators()
-    {
-        return $this->belongsToMany(Administrator::class, 'mobil_home_admin');
-    }
 }
 

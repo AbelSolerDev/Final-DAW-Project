@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
+
 
 class HomeController extends Controller
 {
@@ -23,6 +27,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = Auth::user();
+        if ($user->is_admin) {
+            // Si el usuario es administrador, mostrar la vista de administración
+            $users = User::all();
+            return view('admin.index', compact('users'));
+        } else {
+            // Si el usuario no es administrador, mostrar la vista de usuario normal
+            return view('home');
+        }
     }
+
 }
