@@ -31,7 +31,7 @@ class HomeController extends Controller
         if ($user->is_admin) {
             // Si el usuario es administrador, mostrar la vista de administración
             $users = User::all();
-            return view('admin.index', compact('users'));
+            return view('home', compact('users'));
         } else {
             // Si el usuario no es administrador, mostrar la vista de usuario normal
             return view('home');

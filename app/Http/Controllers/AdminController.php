@@ -12,10 +12,7 @@ class AdminController extends Controller
 {
     public function index ()
     {   
-        $title = 'Administration';
-        $description = 'Here you can manage your business by posting new mobilHomes 
-        as well as editing or deleting existing ones, you can also review registered users.';
-        return view('admin.index', compact('title', 'description'));
+        return view('admin.index');
     }
 
     public function viewMobilHome()
@@ -57,6 +54,7 @@ class AdminController extends Controller
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
         $user->password = Hash::make($validatedData['password']);
+        $user->is_admin = $request->has('admin');
         $user->save();
 
         return redirect()->route('admin.view-user')->with('success', 'User created successfully.');

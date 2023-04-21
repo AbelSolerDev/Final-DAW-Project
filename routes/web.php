@@ -43,24 +43,20 @@ Route::get('admin/view-mobilhome', [\App\Http\Controllers\AdminController::class
 Route::get('admin/new-mobilhome', [\App\Http\Controllers\AdminController::class, 'createMobilHome'])->name('admin.createMobilHome');
 Route::post('/admin/new-mobilhome', 'AdminController@storeMobilHome')->name('admin.storeMobilHome');
 
-/*Route::get('admin/view-user', [\App\Http\Controllers\AdminController::class, 'viewUser'])->name('admin.view-user');*/
-Route::match(['get', 'delete'], '/admin/view-user', 'App\Http\Controllers\AdminController@viewUser')->name('admin.view-user');
 
+Route::match(['get', 'delete'], '/admin/view-user', 'App\Http\Controllers\AdminController@viewUser')->name('admin.view-user');
 Route::get('admin/new-user', [\App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.createUser');
 Route::post('/admin/new-user', 'App\Http\Controllers\AdminController@storeUser')->name('admin.storeUser');
 Route::get('/admin/edit-user/{id}', 'App\Http\Controllers\AdminController@editUser')->name('admin.editUser');
 Route::put('/admin/edit-user/{id}', 'App\Http\Controllers\AdminController@updateUser')->name('admin.updateUser');
 Route::delete('/admin/delete-user/{id}', 'App\Http\Controllers\AdminController@deleteUser')->name('admin.deleteUser');
-/*Route::delete('admin/view-user', 'AdminController@deleteUser')->name('admin.deleteUser');*/
 
-
-/*Route::delete('/admin/users/{user}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');*/
-
-/*
-Route::get('/admin/view-user', 'App\Http\Controllers\AdminController@viewUser')->name('admin.viewUser');
-Route::get('/admin/new-user', 'App\Http\Controllers\AdminController@createUser')->name('admin.createUser');*/
-
-
+Route::get('myaccount', [MyAccountController::class, 'index'])->name('myaccount.index');
+Route::prefix('myaccount')->group(function () {
+    Route::get('favorites', [MyAccountController::class, 'favorites'])->name('myaccount.favorites');
+    Route::get('edit', [MyAccountController::class, 'edit'])->name('myaccount.edit');
+    Route::post('delete', [MyAccountController::class, 'delete'])->name('myaccount.delete');
+});
 
 
 

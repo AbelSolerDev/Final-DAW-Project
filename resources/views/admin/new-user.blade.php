@@ -33,9 +33,16 @@
                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                         </div>
 
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="admin" name="admin">
+                            <label class="form-check-label" for="admin">{{ __('Is admin?') }}</label>
+                        </div>
+
                         <div class="mb-3 text-center">
                         <button type="submit" class="btn btn-primary">{{ __('Create User') }}</button>
                         </div>
+
+
                     </div>
                     </div>
                 </form>

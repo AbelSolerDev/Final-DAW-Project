@@ -3,10 +3,11 @@
 
 @section('content')
     <div class="text-center">
-        <h1>{{ $title }}</h1>
+        <h1>Administration</h1>
     </div>
     <div class="container my-2 text-center">
-        <p>{{ $description }}</p>
+        <p>Here you can manage your business by posting new mobilHomes 
+        as well as editing or deleting existing ones, you can also review registered users.</p>
     </div>
 
 

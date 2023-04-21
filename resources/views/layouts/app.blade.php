@@ -67,7 +67,7 @@
                                     @if (Auth::user()->is_admin)
                                         <a class="dropdown-item" href="{{ route('admin.index') }}">Administration</a>
                                     @else
-                                        <a class="dropdown-item" href="#">My Account</a>
+                                        <a class="dropdown-item" href="{{ route('myaccount.index') }}">My Account</a>
                                     @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
