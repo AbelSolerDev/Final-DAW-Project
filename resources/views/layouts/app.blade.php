@@ -15,6 +15,21 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function showImage(imagePath) {
+                $('#modalImage').attr('src', imagePath);
+                $('#exampleModal').modal('show');
+            }
+
+            $('#exampleModal').on('hidden.bs.modal', function (e) {
+                $('#modalImage').attr('src', '');
+            })
+        function closeImage() {
+            $('#exampleModal').modal('hide');
+        }
+    </script>
+    
 </head>
 <body>
     <div id="app">

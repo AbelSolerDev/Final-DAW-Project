@@ -19,6 +19,11 @@ class SaleController extends Controller
 
         return view('sale.index', compact('title', 'description', 'description2', 'mobilHomes'));
     }
+    public function show(MobilHome $mobilHome)
+    {
+        return view('sale.show', compact('mobilHome'));
+    }
+    
 }
 
 /*Este código utiliza el modelo MobilHome para obtener los móviles que están en venta (on_sale = true)

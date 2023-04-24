@@ -11,7 +11,7 @@
         <div class="mobil-home-box">
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="card mb-4">
-                <img src="{{ $mobilHome->images->first()->image_path }}" alt="Photo of {{ $mobilHome->name }}">
+                <img src="{{ optional($mobilHome->images->first())->image_path }}" alt="Photo of {{ $mobilHome->name }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ $mobilHome->name }}</h5>
                         <p class="card-text">{{ $mobilHome->description }}</p>
@@ -25,10 +25,11 @@
                         </p>
                         <p>
                             @if ($mobilHome->available)
-                                <span>Disponible!</span>
+                                <span>Available!</span>
                             @endif
                         </p>
                     </div>
+                    <a href="{{ route('sale.show', $mobilHome) }}" class="btn btn-primary">Know More</a>
                 </div>
             </div>
         </div>

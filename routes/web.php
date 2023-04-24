@@ -29,21 +29,33 @@ Route::get('/', function () {
 })->name('Welcome');
 
 
-
+/*SECCIÓN DE VENTAS*/
 Route::get('sale', [\App\Http\Controllers\SaleController::class, 'index'])->name('sale.index');
+Route::get('sale/{mobilHome}', [\App\Http\Controllers\SaleController::class, 'show'])->name('sale.show');
 
+/*SECCIÓN DE SOBRE NOSOTROS*/
 Route::get('about-us', [\App\Http\Controllers\AboutUsController::class, 'index'])->name('about-us.index');
 
+/*SECCIÓN DE CONTACTO*/
 Route::get('contact', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact.index');
 
-
+/*SECCIÓN DE ADMINITRACIÓN*/
 Route::get('admin', [\App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
 
+    /*ADMINITRACIÓN MOBILHOME*/
 Route::get('admin/view-mobilhome', [\App\Http\Controllers\AdminController::class, 'viewMobilHome'])->name('admin.view-mobilhome');
 Route::get('admin/new-mobilhome', [\App\Http\Controllers\AdminController::class, 'createMobilHome'])->name('admin.createMobilHome');
 Route::post('/admin/new-mobilhome', 'AdminController@storeMobilHome')->name('admin.storeMobilHome');
+    /*USUARIOS MOBILHOME*/
+Route::post('sale/{mobilHome}/favorites', [\App\Http\Controllers\UserFavoriteController::class, 'store'])->name('user_favorites.store');
+//Route::delete('sale/{mobilHome}', [\App\Http\Controllers\UserFavoriteController::class, 'destroy'])->name('user_favorites.destroy');
+Route::delete('sale/{mobilHome}/favorites', [\App\Http\Controllers\UserFavoriteController::class, 'destroy'])->name('user_favorites.destroy');
 
 
+
+
+
+    /*ADMINITRACIÓN USUARIOS*/
 Route::match(['get', 'delete'], '/admin/view-user', 'App\Http\Controllers\AdminController@viewUser')->name('admin.view-user');
 Route::get('admin/new-user', [\App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.createUser');
 Route::post('/admin/new-user', 'App\Http\Controllers\AdminController@storeUser')->name('admin.storeUser');
@@ -51,6 +63,7 @@ Route::get('/admin/edit-user/{id}', 'App\Http\Controllers\AdminController@editUs
 Route::put('/admin/edit-user/{id}', 'App\Http\Controllers\AdminController@updateUser')->name('admin.updateUser');
 Route::delete('/admin/delete-user/{id}', 'App\Http\Controllers\AdminController@deleteUser')->name('admin.deleteUser');
 
+/*SECCIÓN DE MI CUENTA*/
 Route::get('myaccount', [MyAccountController::class, 'index'])->name('myaccount.index');
 Route::prefix('myaccount')->group(function () {
     Route::get('favorites', [MyAccountController::class, 'favorites'])->name('myaccount.favorites');
