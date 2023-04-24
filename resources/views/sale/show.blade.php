@@ -10,7 +10,9 @@
                     <div class="row">
                         @foreach ($mobilHome->images as $image)
                             <div class="col-md-4 mb-3">
-                                <img src="{{ $image->image_path }}" class="d-block w-100" alt="MobilHome photo" onclick="showImage('{{ $image->image_path }}')">
+                                <div class="aspect-ratio" data-aspect-ratio="16/9">
+                                    <img src="{{ $image->image_path }}" class="img-fluid" alt="MobilHome photo" onclick="showImage('{{ $image->image_path }}')">
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -23,14 +25,16 @@
                             <span class="text-muted">{{ $mobilHome->price }}</span>
                             <span>{{ $mobilHome->discounted_price }}</span>
                         @else
-                            <span>{{ $mobilHome->price }}</span>
+                            <span>{{ $mobilHome->price }}&euro;</span>
                         @endif
                     </p>
                     <p>
-                            @if ($mobilHome->available)
-                                <span>Available!</span>
-                            @endif
+                        @if ($mobilHome->available)
+                            <span class="text-success font-weight-bold">Available!</span>
+                        @endif
                     </p>
+
+
                     @if ($mobilHome->created_at)
                         <p>Publication date: {{ $mobilHome->created_at->format('d/m/Y') }}</p>
                     @endif
@@ -38,6 +42,7 @@
                     @if (!Auth::guest())
                         @if (Auth::user()->is_admin)
                             <a href="{{ route('admin.view-mobilhome') }}" class="btn btn-primary">Go to MobilHomes management</a>
+                        @endif
                     @endif
 
 

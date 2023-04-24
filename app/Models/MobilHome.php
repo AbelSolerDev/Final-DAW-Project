@@ -38,10 +38,5 @@ class MobilHome extends Model
     {
         return $this->hasMany(Promotion::class);
     }
-
-    public function userFavorites()
-    {
-        return $this->hasMany(UserFavorite::class);
-    }
 }
 

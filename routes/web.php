@@ -45,13 +45,9 @@ Route::get('admin', [\App\Http\Controllers\AdminController::class, 'index'])->na
     /*ADMINITRACIÓN MOBILHOME*/
 Route::get('admin/view-mobilhome', [\App\Http\Controllers\AdminController::class, 'viewMobilHome'])->name('admin.view-mobilhome');
 Route::get('admin/new-mobilhome', [\App\Http\Controllers\AdminController::class, 'createMobilHome'])->name('admin.createMobilHome');
-Route::post('/admin/new-mobilhome', 'AdminController@storeMobilHome')->name('admin.storeMobilHome');
-    /*USUARIOS MOBILHOME*/
-Route::post('sale/{mobilHome}/favorites', [\App\Http\Controllers\UserFavoriteController::class, 'store'])->name('user_favorites.store');
-//Route::delete('sale/{mobilHome}', [\App\Http\Controllers\UserFavoriteController::class, 'destroy'])->name('user_favorites.destroy');
-Route::delete('sale/{mobilHome}/favorites', [\App\Http\Controllers\UserFavoriteController::class, 'destroy'])->name('user_favorites.destroy');
-
-
+Route::post('/admin/view-mobilhome', [\App\Http\Controllers\AdminController::class, 'storeMobilHome'])->name('admin.storeMobilHome');
+Route::get('/admin/edit-mobilhome/{id}', 'AdminController@editMobilHome')->name('admin.editMobilHome');
+Route::delete('/admin/mobilhomes/{id}', 'AdminController@deleteMobilHome')->name('admin.deleteMobilHome');
 
 
 

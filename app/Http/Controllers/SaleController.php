@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MobilHome;
+use Illuminate\Support\Str;
+
 
 class SaleController extends Controller
 {

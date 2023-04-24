@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\MobilHome;
+use App\Models\MobilHomeImage;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -17,14 +19,93 @@ class AdminController extends Controller
 
     public function viewMobilHome()
     {
-        return view('admin.view-mobilhome');
+        $title = 'Mobil-Home';
+        $description = 'Create, Read, Update or Delete Mobil-Homes enrolled in your application';
+        $mobilHomes = MobilHome::all();
+        return view('admin.view-mobilhome', compact('title', 'description', 'mobilHomes'));
+        
     }
     
     public function createMobilHome()
     {
         return view('admin.new-mobilhome');
     }
+
+    public function editMobilHome($id)
+    {
+        $mobilHome = MobilHome::findOrFail($id);
+        return view('admin.edit-mobilhome', compact('mobilHome'));
+    }
+
+    public function updateMobilHome($id, Request $request)
+    {
+        $mobilHome = MobilHome::findOrFail($id);
+        $mobilHome->update($request->all());
+        return redirect()->route('admin.view-mobilhome')->with('success', 'MobilHome updated successfully.');
+    }
+
+    public function deleteMobilHome($id)
+    {
+        $mobilHome = MobilHome::findOrFail($id);
+        $mobilHome->delete();
+        return redirect()->route('admin.view-mobilhome')->with('success', 'MobilHome deleted successfully.');
+    }
     
+    
+    public function storeMobilHome(Request $request)
+    {
+        // Validar el formulario
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'nullable',
+            'price' => 'required|numeric',
+            'discounted_price' => 'nullable|numeric',
+            'discount_percentage' => 'nullable|integer|min:1|max:100',
+            'featured' => 'boolean',
+            'favorite' => 'boolean',
+            'available' => 'boolean',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        // Crear la mobilhome
+        $mobilhome = MobilHome::create($validatedData);
+
+        // Manejar las imágenes
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                // Almacenar la imagen en el sistema de archivos
+                $path = Storage::disk('public')->put('mobilhome_images', $image);
+                
+                // Crear una nueva fila en la tabla mobil_home_images
+                $mobilhomeImage = new MobilHomeImage;
+                $mobilhomeImage->mobil_home_id = $mobilhome->id;
+                $mobilhomeImage->image_path = $path;
+                $mobilhomeImage->save();
+            }
+        }
+
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                $filename = $image->getClientOriginalName();
+                $path = $image->storeAs('public/mobilhome_images', $filename);
+                $mobilhomeImage = new MobilHomeImage;
+                $mobilhomeImage->mobil_home_id = $mobilhome->id;
+                $mobilhomeImage->image_path = $filename;
+                $mobilhomeImage->save();
+            }
+        }
+        return redirect()->route('admin.view-mobilhome')->with('success', 'Mobilhome creada exitosamente.');
+    }
+
+
+
+
+
+
+
+
     public function viewUser()
     {
         $title = 'Users';
@@ -99,39 +180,4 @@ class AdminController extends Controller
 
             
     
-    public function storeMobilHome(Request $request)
-    {
-        // Validar el formulario
-        $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'nullable',
-            'price' => 'required|numeric',
-            'discounted_price' => 'nullable|numeric',
-            'discount_percentage' => 'nullable|integer|min:1|max:100',
-            'featured' => 'boolean',
-            'favorite' => 'boolean',
-            'available' => 'boolean',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
-
-        // Crear la mobilhome
-        $mobilhome = MobilHome::create($validatedData);
-
-        // Manejar las imágenes
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                // Almacenar la imagen en el sistema de archivos
-                $path = Storage::disk('public')->put('mobilhome_images', $image);
-                
-                // Crear una nueva fila en la tabla mobil_home_images
-                $mobilhomeImage = new MobilHomeImage;
-                $mobilhomeImage->mobil_home_id = $mobilhome->id;
-                $mobilhomeImage->image_path = $path;
-                $mobilhomeImage->save();
-            }
-        }
-
-        return redirect()->route('admin.index')->with('success', 'Mobilhome creada exitosamente.');
-    }
 }

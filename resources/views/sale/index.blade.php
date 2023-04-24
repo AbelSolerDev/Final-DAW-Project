@@ -8,32 +8,32 @@
     </div>
     <div class="row">
         @foreach ($mobilHomes as $mobilHome)
-        <div class="mobil-home-box">
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="card mb-4">
-                <img src="{{ optional($mobilHome->images->first())->image_path }}" alt="Photo of {{ $mobilHome->name }}">
+            <div class="col-md-4 col-lg-3 mb-4 mx-auto">
+                <div class="card h-100">
+                    <img src="{{ optional($mobilHome->images->first())->image_path }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid">
                     <div class="card-body">
                         <h5 class="card-title">{{ $mobilHome->name }}</h5>
-                        <p class="card-text">{{ $mobilHome->description }}</p>
-                        <p class="card-text">
+                        <p class="card-text">{{ Str::limit($mobilHome->description, $limit = 100, $end = '...') }}</p>
+                        <p class="card-text text-right" >
                             @if ($mobilHome->discounted_price)
                                 <span class="text-muted">{{ $mobilHome->price }}</span>
                                 <span>{{ $mobilHome->discounted_price }}</span>
                             @else
-                                <span>{{ $mobilHome->price }}</span>
+                                <span>{{ $mobilHome->price }}&euro;</span>
                             @endif
-                        </p>
-                        <p>
-                            @if ($mobilHome->available)
-                                <span>Available!</span>
-                            @endif
+                            <span class="float-right">
+                                @if ($mobilHome->available)
+                                    <span class="text-success font-weight-bold">Available!</span>
+                                @endif
+                            </span>
                         </p>
                     </div>
                     <a href="{{ route('sale.show', $mobilHome) }}" class="btn btn-primary">Know More</a>
                 </div>
             </div>
-        </div>
         @endforeach
     </div>
-{{ $mobilHomes->links() }}
+    {{ $mobilHomes->links() }}
 @endsection
+
+
