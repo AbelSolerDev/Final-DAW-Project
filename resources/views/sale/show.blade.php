@@ -11,10 +11,12 @@
                         @foreach ($mobilHome->images as $image)
                             <div class="col-md-4 mb-3">
                                 <div class="aspect-ratio" data-aspect-ratio="16/9">
-                                    <img src="{{ $image->image_path }}" class="img-fluid" alt="MobilHome photo" onclick="showImage('{{ $image->image_path }}')">
+                                    <img src="{{ $image->image_path ? '/storage/' . $image->image_path : '/storage/mobilhome_images/default.jpg' }}" class="img-fluid" alt="MobilHome photo" onclick="showImage('{{ $image->image_path }}')">
                                 </div>
                             </div>
                         @endforeach
+                        <!--<img src="{{ $mobilHome->images->first() ? '/storage/' . $mobilHome->images->first()->image_path : '/storage/mobilhome_images/default.jpg' }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid thumbnail-img" onclick="showImage('{{ $image->image_path }}')">
+                        <img src="{{ $image->image_path }}" class="img-fluid" alt="MobilHome photo" onclick="showImage('{{ $image->image_path }}')">-->
                     </div>
 
                     <br>

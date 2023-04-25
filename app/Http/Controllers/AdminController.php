@@ -21,9 +21,10 @@ class AdminController extends Controller
     {
         $title = 'Mobil-Home';
         $description = 'Create, Read, Update or Delete Mobil-Homes enrolled in your application';
-        $mobilHomes = MobilHome::all();
+        /*$mobilHomes = MobilHome::all();*/
+        $mobilHomes = MobilHome::with('images')->get();
+
         return view('admin.view-mobilhome', compact('title', 'description', 'mobilHomes'));
-        
     }
     
     public function createMobilHome()
@@ -74,30 +75,30 @@ class AdminController extends Controller
         if ($request->hasFile('images')) {
             $images = $request->file('images');
             foreach ($images as $image) {
+                // Obtener el nombre de archivo original
+                $filename = $image->getClientOriginalName();
+
                 // Almacenar la imagen en el sistema de archivos
-                $path = Storage::disk('public')->put('mobilhome_images', $image);
-                
+                //$path = $image->storeAs('mobilhome_images', uniqid() . '-' . $filename);
+                $path = $image->storeAs('mobilhome_images', $filename, 'public');
+
+                // Obtener la ruta completa de la imagen almacenada
+                $fullPath = 'mobilhome_images/' . basename($path);
+
                 // Crear una nueva fila en la tabla mobil_home_images
                 $mobilhomeImage = new MobilHomeImage;
                 $mobilhomeImage->mobil_home_id = $mobilhome->id;
-                $mobilhomeImage->image_path = $path;
+                $mobilhomeImage->image_path = $fullPath;
                 $mobilhomeImage->save();
             }
         }
 
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                $filename = $image->getClientOriginalName();
-                $path = $image->storeAs('public/mobilhome_images', $filename);
-                $mobilhomeImage = new MobilHomeImage;
-                $mobilhomeImage->mobil_home_id = $mobilhome->id;
-                $mobilhomeImage->image_path = $filename;
-                $mobilhomeImage->save();
-            }
-        }
         return redirect()->route('admin.view-mobilhome')->with('success', 'Mobilhome creada exitosamente.');
     }
+
+
+    
+
 
 
 

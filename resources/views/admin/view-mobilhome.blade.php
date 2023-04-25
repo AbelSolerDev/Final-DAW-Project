@@ -44,7 +44,9 @@
             <tbody>
                 @foreach ($mobilHomes as $mobilHome)
                     <tr>
-                        <td><img src="{{ optional($mobilHome->images->first())->image_path }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid thumbnail-img"></td>
+                        
+                        <td><img src="{{ $mobilHome->images->first() ? '/storage/' . $mobilHome->images->first()->image_path : '/storage/mobilhome_images/default.jpg' }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid thumbnail-img"></td>
+                        <!--<td><img src="{{ $mobilHome->images->first() ? asset($mobilHome->images->first()->image_path) : asset('storage/mobilhome_images/default.jpg') }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid thumbnail-img"></td>-->
                         <td>{{ $mobilHome->name }}</td>
                         <td>{{ Str::limit($mobilHome->description, $limit = 40, $end = '...') }}</td> 
                         <td>{{ $mobilHome->price }}&euro;</td>

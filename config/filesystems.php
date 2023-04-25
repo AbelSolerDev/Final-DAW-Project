@@ -85,5 +85,12 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],
+    'mobileHome' => [
+        'driver' => 'local',
+        'root' => public_path('mobilhome_images'),
+        'url' => env('APP_URL').'/mobilhome_images',
+        'visibility' => 'public',
+    ],
+    
 
 ];

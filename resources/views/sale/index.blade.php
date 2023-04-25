@@ -6,11 +6,12 @@
         <p>{{ $description }}</p>
         <p>{{ $description2 }}</p>
     </div>
-    <div class="row">
+    <div class="row publicaciónMobilHome">
         @foreach ($mobilHomes as $mobilHome)
             <div class="col-md-4 col-lg-3 mb-4 mx-auto">
                 <div class="card h-100">
-                    <img src="{{ optional($mobilHome->images->first())->image_path }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid">
+                    <img src="{{ $mobilHome->images->first() ? '/storage/' . $mobilHome->images->first()->image_path : '/storage/mobilhome_images/default.jpg' }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid thumbnail-img">
+                    <!--<img src="{{ optional($mobilHome->images->first())->image_path }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid">-->
                     <div class="card-body">
                         <h5 class="card-title">{{ $mobilHome->name }}</h5>
                         <p class="card-text">{{ Str::limit($mobilHome->description, $limit = 100, $end = '...') }}</p>
