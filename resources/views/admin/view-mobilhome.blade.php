@@ -38,19 +38,22 @@
                     <th style="width: 30%;">Description</th>
                     <th style="width: 10%;">Price</th>
                     <th style="width: 10%;">Available</th>
+                    <th style="width: 10%;">Discounted Price</th>
+                    <th style="width: 10%;">On Sale</th>
                     <th style="width: 10%;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($mobilHomes as $mobilHome)
-                    <tr>
-                        
+                    <tr>    
                         <td><img src="{{ $mobilHome->images->first() ? '/storage/' . $mobilHome->images->first()->image_path : '/storage/mobilhome_images/default.jpg' }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid thumbnail-img"></td>
                         <!--<td><img src="{{ $mobilHome->images->first() ? asset($mobilHome->images->first()->image_path) : asset('storage/mobilhome_images/default.jpg') }}" alt="Photo of {{ $mobilHome->name }}" class="img-fluid thumbnail-img"></td>-->
                         <td>{{ $mobilHome->name }}</td>
                         <td>{{ Str::limit($mobilHome->description, $limit = 40, $end = '...') }}</td> 
                         <td>{{ $mobilHome->price }}&euro;</td>
                         <td>{{ $mobilHome->available ? 'Yes' : 'No' }}</td>
+                        <td>{{ $mobilHome->discounted_price }}&euro;</td>
+                        <td>{{ $mobilHome->on_sale ? 'Yes' : 'No' }}</td>
                         <td>
                             <div class="btn-group">
                                 <a href="{{ route('sale.show', $mobilHome) }}" class="btn btn-info">Show</a>

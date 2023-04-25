@@ -22,3 +22,14 @@ main {
     margin-left: 100px;
     margin-right: 100px;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .page-item {
+    display: inline-block;
+    margin-right: 5px;
+}

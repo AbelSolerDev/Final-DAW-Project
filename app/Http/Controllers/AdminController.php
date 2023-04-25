@@ -32,18 +32,47 @@ class AdminController extends Controller
         return view('admin.new-mobilhome');
     }
 
-    public function editMobilHome($id)
-    {
-        $mobilHome = MobilHome::findOrFail($id);
-        return view('admin.edit-mobilhome', compact('mobilHome'));
-    }
-
-    public function updateMobilHome($id, Request $request)
+    public function editMobilHome(Request $request, $id)
     {
         $mobilHome = MobilHome::findOrFail($id);
         $mobilHome->update($request->all());
-        return redirect()->route('admin.view-mobilhome')->with('success', 'MobilHome updated successfully.');
+        
+        if ($request->has('discount')) {
+            $discount = $request->discount;
+            $mobilHome->discount_percentage = ($discount * 100);
+            $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount);
+        } else {
+            $mobilHome->discount_percentage = null;
+            $mobilHome->discounted_price = null;
+        }
+        
+        $mobilHome->on_sale = $request->has('sold');
+        $mobilHome->save();
+        
+        return view('admin.edit-mobilhome', compact('mobilHome'));
     }
+    
+    public function deleteMobilHomeImage($id, $imageId)
+    {
+        $mobilHome = MobilHome::findOrFail($id);
+        $image = MobilHomeImage::findOrFail($imageId);
+        //$image = $mobilHome->images()->find($imageId);
+
+        if (!$image) {
+            return redirect()->back()->with('error', 'The image does not exist.');
+        }
+
+        // Eliminar archivo de la imagen del servidor
+        Storage::delete($image->image_path);
+
+        // Eliminar entrada de imagen de la base de datos
+        $image->delete();
+
+        return redirect()->route('admin.edit-mobilhome', $mobilHome->id)->with('success', 'The image has been successfully removed.');
+    }
+
+
+
 
     public function deleteMobilHome($id)
     {

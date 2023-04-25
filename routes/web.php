@@ -46,7 +46,10 @@ Route::get('admin', [\App\Http\Controllers\AdminController::class, 'index'])->na
 Route::get('admin/view-mobilhome', [\App\Http\Controllers\AdminController::class, 'viewMobilHome'])->name('admin.view-mobilhome');
 Route::get('admin/new-mobilhome', [\App\Http\Controllers\AdminController::class, 'createMobilHome'])->name('admin.createMobilHome');
 Route::post('/admin/view-mobilhome', [\App\Http\Controllers\AdminController::class, 'storeMobilHome'])->name('admin.storeMobilHome');
-Route::get('/admin/edit-mobilhome/{id}', 'AdminController@editMobilHome')->name('admin.editMobilHome');
+Route::get('/admin/edit-mobilhome/{id}', [\App\Http\Controllers\AdminController::class, 'editMobilHome'])->name('admin.editMobilHome');
+Route::delete('/admin/edit-mobilhome/{id}/{imageId}', [\App\Http\Controllers\AdminController::class, 'deleteMobilHomeImage'])->name('admin.deleteMobilHomeImage');
+//Route::delete('/admin/edit-mobilhome/{id}/images/{imageId}', [\App\Http\Controllers\AdminController::class, 'deleteMobilHomeImage'])->name('admin.deleteMobilHomeImage');
+
 Route::delete('/admin/mobilhomes/{id}', 'AdminController@deleteMobilHome')->name('admin.deleteMobilHome');
 
 

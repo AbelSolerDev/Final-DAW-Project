@@ -17,7 +17,7 @@ class SaleController extends Controller
         $mobilHomes = MobilHome::where('on_sale', false)
                                 ->where('available', true)
                                 ->orderBy('created_at', 'desc')
-                                ->paginate(12);
+                                ->simplePaginate(12);
 
         return view('sale.index', compact('title', 'description', 'description2', 'mobilHomes'));
     }
