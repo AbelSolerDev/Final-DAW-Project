@@ -61,10 +61,10 @@ Route::put('/admin/edit-user/{id}', 'App\Http\Controllers\AdminController@update
 Route::delete('/admin/delete-user/{id}', 'App\Http\Controllers\AdminController@deleteUser')->name('admin.deleteUser');
 
 /*SECCIÓN DE MI CUENTA*/
-
 Route::get('myaccount', [\App\Http\Controllers\MyAccountController::class, 'index'])->name('myaccount.index');
-Route::get('/myaccount/edit', [\App\Http\Controllers\MyAccountController::class, 'editUser'])->name('myaccount.edit');
-Route::delete('/myaccount/delete', [\App\Http\Controllers\MyAccountController::class, 'deleteUser'])->name('myaccount.delete');
+Route::get('/myaccount/edit', [\App\Http\Controllers\MyAccountController::class, 'editUser'])->name('myaccount.editUser');
+Route::put('/myaccount/update/{id}', [\App\Http\Controllers\MyAccountController::class, 'updateUser'])->name('myaccount.updateUser');
+Route::delete('/myaccount/delete', [\App\Http\Controllers\MyAccountController::class, 'deleteUser'])->name('myaccount.deleteUser');
 
 
 

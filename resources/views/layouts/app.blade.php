@@ -108,13 +108,11 @@
 
         </main>
 
-        <footer class="footer bg-light fixed-bottom" style="min-height: 3%;">
+        <footer class="footer">
             <div class="container text-center">
                 <span class="text-muted">Abel Soler Fernández © {{ date('Y') }} {{ config('app.name') }} ~ IlernaOnline</span>
             </div>
         </footer>
-
-
     </div>
 </body>
 </html>

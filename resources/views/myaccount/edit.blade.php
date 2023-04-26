@@ -1,17 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
 <div class="text-center">
             <h1>{{ $title }}</h1>
         </div>
         <div class="container my-2 text-center">
-            <p>{{ $description }}</p>
+            <h3>{{ $description }}</h3>
         </div>
 
-
-
     <div class="container mt-5">
-        <form method="POST" action="{{ route('admin.updateUser', $user->id) }}">
+        <form method="POST" action="{{ route('myaccount.updateUser', $user->id) }}">
             @csrf
             @method('PUT')
             <div class="row justify-content-center">

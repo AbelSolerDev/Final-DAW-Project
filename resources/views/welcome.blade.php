@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-            <div class="text-center" style="position: relative;">
-                <img src="{{ asset('imagenes/portada/imagenPortada2Retocada.jpg') }}" class="img-fluid rounded mx-auto d-block" alt="imagenPortada" style="max-width: 70%;">
-                <h1 style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 6rem;">Welcome</h1>
-                <!--<h3 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 3rem;">Encuentra el mejor hogar para vivir</h3>-->
-            </div>
+<div class="text-center welcome-container">
+    <h1 class="welcome-title">Welcome</h1>
+    <img src="{{ asset('imagenes/portada/imagenPortada2Retocada.jpg') }}" class="img-fluid rounded-circle img-thumbnail mx-auto d-block" alt="imagenPortada" style="max-width: 30%; object-fit: cover;">
+    <p class="welcome-text">Welcome to the portal where you can view the best Mobil-Homes for sale. 
+     <br> If you register, you can see the Mobil-Homes on discount.
+    </p>
+    <a href="{{ route('sale.index') }}" class="btn welcome-btn">Get Started</a>
+</div>
 @endsection
