@@ -28,6 +28,11 @@
         function closeImage() {
             $('#exampleModal').modal('hide');
         }
+        function clearDiscountedPriceError() {
+                if (document.getElementById("discount").value === "") {
+                    document.getElementById("discounted_price").setCustomValidity("");
+                }
+            }
     </script>
     
 </head>

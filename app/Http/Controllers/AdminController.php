@@ -42,93 +42,88 @@ class AdminController extends Controller
         $mobilHome = MobilHome::findOrFail($id);
         $mobilHome->fill($request->all());
         $discount_percentage = $mobilHome->discount_percentage ?? 0;
+        $discounted_price = $mobilHome->discounted_price ?? null;
 
-        if ($mobilHome->discount_percentage !== null && $mobilHome->discount_percentage !== 0) {
-            $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $mobilHome->discount_percentage / 100);
+        if (round($discount_percentage, 0) === 0) {
+            // Mantener el valor actual de discounted_price si discount_percentage es 0
+            $mobilHome->discounted_price = 0;
+        } elseif ($discount_percentage !== null && $discount_percentage !== 0) {
+            $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount_percentage / 100);
         } else {
-            $mobilHome->discounted_price = null;
+            $mobilHome->discounted_price = 0;
         }
 
         if ($request->has('discount')) {
             $discount = $request->discount;
-            if ($mobilHome->discount_percentage !== null && $discount !== $mobilHome->discount_percentage / 100) {
+            if ($discount_percentage !== null && $discount !== $discount_percentage / 100) {
                 // El porcentaje de descuento ha cambiado, recalcular el precio descontado
                 $mobilHome->discount_percentage = $discount * 100;
-                $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount);
-            } elseif ($mobilHome->discount_percentage === null) {
+                $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount / 100);
+            } elseif ($discount_percentage === null || $discount_percentage === 0 ) {
                 // No había un porcentaje de descuento registrado previamente
-                $mobilHome->discount_percentage = null;
-                $mobilHome->discounted_price = null;
+                $mobilHome->discount_percentage = $discount * 100;
+                $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount / 100);
+            } elseif (round($discount_percentage, 0) === 0 && empty($discount)) {
+                // Se ha seleccionado "No discount", borrar el valor de discounted_price
+                $mobilHome->discounted_price = $mobilHome->price;
             }
-            
+            // Nueva condición para establecer el valor de discounted_price en 0 si es igual a price
+            if (round($mobilHome->discounted_price, 2) === round($mobilHome->price, 2)) {
+                $mobilHome->discounted_price = 0;
+            }
         } else {
             // No se ha seleccionado un porcentaje de descuento
             $mobilHome->discount_percentage = null;
-            if ($mobilHome->discount_percentage === null || $mobilHome->discount_percentage === 0 ) {
+            if ($discount_percentage === null) {
                 $mobilHome->discounted_price = null;
-            } else {
-                $mobilHome->discounted_price = $mobilHome->price;
+            }
+            // Nueva condición para establecer el valor de discounted_price en 0 si es igual a price
+            if (round($mobilHome->discounted_price, 2) === round($mobilHome->price, 2)) {
+                $mobilHome->discounted_price = 0;
+            }
+        }
+        $mobilHome->save();
+
+        
+        // GESTIÓN DE VENDIDO //
+        $mobilHome->on_sale = $request->has('sold');
+        // GESTIÓN DE IMAGENES //
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            if (!is_null($images) && (is_array($images) || is_object($images))) {
+                foreach ($images as $image) {
+                    // Obtener el nombre de archivo original
+                    $filename = $image->getClientOriginalName();
+        
+                    // Almacenar la imagen en el sistema de archivos
+                    //$path = $image->storeAs('mobilhome_images', uniqid() . '-' . $filename);
+                    $path = $image->storeAs('mobilhome_images', $filename, 'public');
+        
+                    // Obtener la ruta completa de la imagen almacenada
+                    $fullPath = 'mobilhome_images/' . basename($path);
+        
+                    // Crear una nueva fila en la tabla mobil_home_images
+                    $mobilhomeImage = new MobilHomeImage;
+                    $mobilhomeImage->mobil_home_id = $mobilHome->id;
+                    $mobilhomeImage->image_path = $fullPath;
+                    $mobilhomeImage->save();
+                }
             }
         }
         
-        $mobilHome->on_sale = $request->has('sold');
-
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                // Obtener el nombre de archivo original
-                $filename = $image->getClientOriginalName();
-
-                // Almacenar la imagen en el sistema de archivos
-                //$path = $image->storeAs('mobilhome_images', uniqid() . '-' . $filename);
-                $path = $image->storeAs('mobilhome_images', $filename, 'public');
-
-                // Obtener la ruta completa de la imagen almacenada
-                $fullPath = 'mobilhome_images/' . basename($path);
-
-                // Crear una nueva fila en la tabla mobil_home_images
-                $mobilhomeImage = new MobilHomeImage;
-                $mobilhomeImage->mobil_home_id = $mobilHome->id;
-                $mobilhomeImage->image_path = $fullPath;
-                $mobilhomeImage->save();
-            }
-        }
-        if ($request->has('images')) {
+        if (!is_null($request->input('images'))) {
             foreach ($request->input('images') as $imageId) {
                 $image = MobilHomeImage::findOrFail($imageId);
                 Storage::delete($image->image_path);
                 $image->delete();
             }
         }
+        
 
         $mobilHome->save();
 
         return redirect()->route('admin.view-mobilhome')->with('success', 'The mobile home has been satisfactorily modified.');
     }
-
-
-
-    /*
-    public function deleteMobilHomeImage($id, $imageId)
-    {
-        $mobilHome = MobilHome::findOrFail($id);
-        $image = MobilHomeImage::findOrFail($imageId);
-        //$image = $mobilHome->images()->find($imageId);
-
-        if (!$image) {
-            return redirect()->back()->with('error', 'The image does not exist.');
-        }
-
-        // Eliminar archivo de la imagen del servidor
-        Storage::delete($image->image_path);
-
-        // Eliminar entrada de imagen de la base de datos
-        $image->delete();
-
-        return redirect()->route('admin.view-mobilhome', $mobilHome->id)->with('success', 'The image has been successfully removed.');
-    }*/
-
-
 
 
     public function deleteMobilHome($id)

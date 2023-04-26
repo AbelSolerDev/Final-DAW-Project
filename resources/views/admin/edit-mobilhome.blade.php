@@ -29,27 +29,23 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="price" class="col-md-4 col-form-label text-md-end">{{ __('Discounted Price') }}</label>
+                                <label for="discounted_price" class="col-md-4 col-form-label text-md-end">{{ __('Price with Discount') }}</label>
                                 <div class="col-md-6">
-                                    <input id="discounted_price" type="number" step="0.01" class="form-control" name="price" value="{{ $mobilHome->discounted_price !== null ? $mobilHome->discounted_price : '' }}" disabled required>
+                                    <input id="discounted_price" type="number" step="0.01" class="form-control" name="discounted_price" value="{{ $mobilHome->discounted_price !== null ? $mobilHome->discounted_price : '' }}"{{ $mobilHome->discount_percentage !== null ? ' disabled' : '' }} required>
                                 </div>
                             </div>
-
-
                             <div class="row mb-3">
                                 <label for="discount" class="col-md-4 col-form-label text-md-end">{{ __('Discount') }}</label>
                                 <div class="col-md-6">
-                                <select id="discount" name="discount" onchange="clearDiscountedPriceError()">
-                                    <option value="" {{ $mobilHome->discount_percentage === null ? 'selected' : '' }}>No discount</option>
-                                    @for ($i = 5; $i <= 95; $i += 5)
-                                        @php
-                                            $selected = ($mobilHome->discount_percentage !== null && $mobilHome->discount_percentage == $i) || ($mobilHome->discount_percentage === null && $i == 5);
-                                        @endphp
-                                        <option value="{{ $i }}" {{ $selected ? 'selected' : '' }}>{{ $i }}% discount</option>
-                                    @endfor
-                                </select>
-
-
+                                    <select id="discount" name="discount" onchange="clearDiscountedPriceError()">
+                                        <option value=""{{ $mobilHome->discount_percentage === null ? ' selected' : '' }}>No discount</option>
+                                        @for ($i = 0.05; $i <= 0.95; $i += 0.05)
+                                            @php
+                                                $selected = ($mobilHome->discount_percentage !== null && $mobilHome->discount_percentage == $i);
+                                            @endphp
+                                            <option value="{{ $i }}"{{ $selected ? ' selected' : '' }}>{{ $i }}% discount</option>
+                                        @endfor
+                                    </select>
                                 </div>
                             </div>
                             <div class="row mb-3">
