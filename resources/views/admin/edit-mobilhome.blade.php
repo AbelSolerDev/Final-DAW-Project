@@ -31,7 +31,7 @@
                             <div class="row mb-3">
                                 <label for="discounted_price" class="col-md-4 col-form-label text-md-end">{{ __('Price with Discount') }}</label>
                                 <div class="col-md-6">
-                                    <input id="discounted_price" type="number" step="0.01" class="form-control" name="discounted_price" value="{{ $mobilHome->discounted_price !== null ? $mobilHome->discounted_price : '' }}"{{ $mobilHome->discount_percentage !== null ? ' disabled' : '' }} required>
+                                    <input id="discounted_price" type="number" step="0.01" class="form-control" name="discounted_price" value="{{ $mobilHome->discounted_price !== null ? $mobilHome->discounted_price : '' }}" required disabled>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -74,19 +74,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @if($mobilHome->images !== null)
-                                    @foreach ($mobilHome->images as $image)
+                                    @if(count($mobilHome->images) > 0)
+                                        @foreach ($mobilHome->images as $image)
+                                            <tr>
+                                                <td>
+                                                    <img 
+                                                        src="{{ $image->image_path ? '/storage/' . $image->image_path : '/storage/mobilhome_images/default.jpg' }}" 
+                                                        class="img-fluid thumbnail-img small-img" 
+                                                        alt="Photo of {{ $mobilHome->name }}"
+                                                    >
+                                                </td>
+                                                <td><input type="checkbox" name="images[]" value="{{ $image->id }}"></td>
+                                            </tr>
+                                        @endforeach
+                                    @else
                                         <tr>
-                                            <td>
-                                                <img 
-                                                    src="{{ $image->image_path ? '/storage/' . $image->image_path : '/storage/mobilhome_images/default.jpg' }}" 
-                                                    class="img-fluid thumbnail-img small-img" 
-                                                    alt="Photo of {{ $mobilHome->name }}"
-                                                ></td>
-                                            <td><input type="checkbox" name="images[]" value="{{ $image->id }}"></td>
+                                            <td colspan="2">NO</td>
                                         </tr>
-                                    @endforeach
-                                @endif
+                                    @endif
                                 </tbody>
                             </table>
                             <hr>
