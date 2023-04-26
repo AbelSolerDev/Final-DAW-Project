@@ -23,7 +23,14 @@ class MobilHome extends Model
         'available',
         'image',
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::deleting(function ($mobilHome) {
+            $mobilHome->images()->delete();
+        });
+    }
     public function images()
     {
         return $this->hasMany(MobilHomeImage::class);

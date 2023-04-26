@@ -18,4 +18,5 @@ class MobilHomeImage extends Model
     {
         return $this->belongsTo(mobilHome::class);
     }
+    
 }

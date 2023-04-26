@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MyAccountController extends Controller
 {
@@ -14,19 +15,17 @@ class MyAccountController extends Controller
         return view('myaccount.index', compact('user', 'favorites'));
     }
 
-    public function favorites()
-    {
-        // Implementa la lógica para mostrar los favoritos del usuario
-    }
-
     public function edit()
     {
         // Implementa la lógica para editar la información del usuario
     }
 
-    public function delete()
+    public function deleteUser()
     {
-        // Implementa la lógica para eliminar la cuenta del usuario
+        $user = Auth::user();
+        $user->delete();
+        Auth::logout();
+        return redirect()->route('home')->with('success', 'Account deleted successfully.');
     }
 }
 

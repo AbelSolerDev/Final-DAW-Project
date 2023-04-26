@@ -48,12 +48,7 @@ Route::get('admin/new-mobilhome', [\App\Http\Controllers\AdminController::class,
 Route::post('/admin/view-mobilhome', [\App\Http\Controllers\AdminController::class, 'storeMobilHome'])->name('admin.storeMobilHome');
 Route::get('/admin/edit-mobilhome/{id}', [\App\Http\Controllers\AdminController::class, 'updateMobilHome'])->name('admin.updateMobilHome');
 Route::put('/admin/edit-mobilhome/{id}', [\App\Http\Controllers\AdminController::class, 'editMobilHome'])->name('admin.editMobilHome');
-//Route::get('/admin/edit-mobilhome/{id}/delete/{imageId}', [\App\Http\Controllers\AdminController::class, 'deleteMobilHomeImage'])->name('admin.deleteMobilHomeImage');
-//Route::delete('/admin/edit-mobilhome/{id}/delete/{imageId}', [\App\Http\Controllers\AdminController::class, 'deleteMobilHomeImage'])->name('admin.deleteMobilHomeImage');
-
-//Route::delete('/admin/edit-mobilhome/{id}/images/{imageId}', [\App\Http\Controllers\AdminController::class, 'deleteMobilHomeImage'])->name('admin.deleteMobilHomeImage');
-
-Route::delete('/admin/mobilhomes/{id}', 'AdminController@deleteMobilHome')->name('admin.deleteMobilHome');
+Route::delete('/admin/mobilhome/{id}', [\App\Http\Controllers\AdminController::class, 'deleteMobilHome'])->name('admin.deleteMobilHome');
 
 
 
@@ -66,12 +61,10 @@ Route::put('/admin/edit-user/{id}', 'App\Http\Controllers\AdminController@update
 Route::delete('/admin/delete-user/{id}', 'App\Http\Controllers\AdminController@deleteUser')->name('admin.deleteUser');
 
 /*SECCIÓN DE MI CUENTA*/
-Route::get('myaccount', [MyAccountController::class, 'index'])->name('myaccount.index');
-Route::prefix('myaccount')->group(function () {
-    Route::get('favorites', [MyAccountController::class, 'favorites'])->name('myaccount.favorites');
-    Route::get('edit', [MyAccountController::class, 'edit'])->name('myaccount.edit');
-    Route::post('delete', [MyAccountController::class, 'delete'])->name('myaccount.delete');
-});
+
+Route::get('myaccount', [\App\Http\Controllers\MyAccountController::class, 'index'])->name('myaccount.index');
+Route::get('/myaccount/edit', [\App\Http\Controllers\MyAccountController::class, 'editUser'])->name('myaccount.edit');
+Route::delete('/myaccount/delete', [\App\Http\Controllers\MyAccountController::class, 'deleteUser'])->name('myaccount.delete');
 
 
 
