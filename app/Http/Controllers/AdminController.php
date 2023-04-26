@@ -82,11 +82,23 @@ class AdminController extends Controller
                 $mobilHome->discounted_price = 0;
             }
         }
-        $mobilHome->save();
+        //volver al porcentaje original en unidades para poder guardarlo en la base de datos
+        $mobilHome->discount_percentage = ($mobilHome->discount_percentage / 100);
 
-        
         // GESTIÓN DE VENDIDO //
+        $oldOnSale = $mobilHome->on_sale;
         $mobilHome->on_sale = $request->has('sold');
+        if ($mobilHome->on_sale) {
+            $mobilHome->available = 0;
+        } else {
+            $mobilHome->available = $request->input('available', 0);
+            // Si on_sale cambia de 1 a 0, establecer available en 1
+            if ($oldOnSale && !$mobilHome->on_sale) {
+                $mobilHome->available = 1;
+            }
+        }
+        
+
         // GESTIÓN DE IMAGENES //
         if ($request->hasFile('images')) {
             $images = $request->file('images');

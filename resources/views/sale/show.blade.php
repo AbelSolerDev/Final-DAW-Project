@@ -16,40 +16,39 @@
                             </div>
                         @endforeach
                     </div>
-
                     <br>
-
                     <p>{{ $mobilHome->description }}</p>
-                    <p class="card-text">
-                        @if ($mobilHome->discounted_price)
-                            <span class="text-muted">{{ $mobilHome->price }}</span>
-                            <span>{{ $mobilHome->discounted_price }}</span>
-                        @else
-                            <span>{{ $mobilHome->price }}&euro;</span>
+                    <p class="card-text text-right">
+                    @if ($mobilHome->on_sale)
+                        <span class="text-danger font-weight-bold; font-size:100px;">SOLD</span>
+                    @elseif (round($mobilHome->discount_percentage, 0) > 1 || $mobilHome->discounted_price > 1)
+                        @if (round($mobilHome->discount_percentage, 0) !== 0)
+                            <span style="text-decoration: line-through;">{{ $mobilHome->price }}&euro;</span>
+                            <span style="color:red; font-size:20px;">{{ $mobilHome->discount_percentage }}%</span>
                         @endif
+                        <span style="color:green; font-weight: bold; font-size:20px;">Now only for: {{ $mobilHome->discounted_price }}&euro;</span>
+                    @else
+                        <span>{{ $mobilHome->price }}&euro;</span>
+                    @endif
                     </p>
                     <p>
                         @if ($mobilHome->available)
                             <span class="text-success font-weight-bold">Available!</span>
                         @endif
                     </p>
-
-
                     @if ($mobilHome->created_at)
                         <p>Publication date: {{ $mobilHome->created_at->format('d/m/Y') }}</p>
                     @endif
 
                     @if (!Auth::guest())
                         @if (Auth::user()->is_admin)
-                            <a href="{{ route('admin.view-mobilhome') }}" class="btn btn-primary">Go to MobilHomes management</a>
+                            <a href="{{ route('admin.view-mobilhome') }}" class="btn btn-primary">Go to MobilHomes Management</a>
                         @endif
                     @endif
-
-
                     <br>
                     <br>
 
-                    <a href="{{ route('sale.index') }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('sale.index') }}" class="btn btn-success">Back</a>
                 </div>
             </div>
         </div>

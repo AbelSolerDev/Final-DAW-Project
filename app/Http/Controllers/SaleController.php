@@ -14,8 +14,10 @@ class SaleController extends Controller
         $title = 'Sale of Mobil-Homes';
         $description = 'Here you can find a list of all mobile homes available for sale.';
         $description2 = 'If you want to see the promotions, register as a user';
-        $mobilHomes = MobilHome::where('on_sale', false)
+        $mobilHomes = MobilHome::where('on_sale', true)
+                                ->orWhere('on_sale', false)
                                 ->where('available', true)
+                                ->orWhere('available', false)
                                 ->orderBy('created_at', 'desc')
                                 ->simplePaginate(12);
 
@@ -25,7 +27,6 @@ class SaleController extends Controller
     {
         return view('sale.show', compact('mobilHome'));
     }
-    
 }
 
 /*Este código utiliza el modelo MobilHome para obtener los móviles que están en venta (on_sale = true)

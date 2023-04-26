@@ -3,6 +3,11 @@
 
 
 @section('content')
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 
     <div class="container">
         <div class="row">
@@ -37,9 +42,8 @@
                     <th style="width: 15%;">Name</th>
                     <th style="width: 30%;">Description</th>
                     <th style="width: 10%;">Price</th>
-                    <th style="width: 5%;">%</th>
+                    <th style="width: 5%;">Discount</th>
                     <th style="width: 20%;">Price with Discount</th>
-                    <th style="width: 10%;">Available</th>
                     <th style="width: 10%;">Sold</th>
                     <th style="width: 10%;">Actions</th>
                 </tr>
@@ -68,7 +72,6 @@
                                 {{ $mobilHome->discounted_price }}&euro;
                             @endif
                         </td>
-                        <td>{{ $mobilHome->available ? 'Yes' : 'No' }}</td>
                         <td>{{ $mobilHome->on_sale ? 'Yes' : 'No' }}</td>
                         <td>
                             <div class="btn-group">
@@ -86,11 +89,7 @@
             </tbody>
         </table>
     </div>
-    @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
+
 
 
 

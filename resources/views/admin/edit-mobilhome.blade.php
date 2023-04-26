@@ -39,7 +39,7 @@
                                 <div class="col-md-6">
                                     <select id="discount" name="discount" onchange="clearDiscountedPriceError()">
                                         <option value=""{{ $mobilHome->discount_percentage === null ? ' selected' : '' }}>No discount</option>
-                                        @for ($i = 0.05; $i <= 0.95; $i += 0.05)
+                                        @for ($i = 5; $i <= 95; $i += 5)
                                             @php
                                                 $selected = ($mobilHome->discount_percentage !== null && $mobilHome->discount_percentage == $i);
                                             @endphp
@@ -54,6 +54,11 @@
                                         <label class="custom-control-label" for="sold">{{ __('On Sale') }} = Sold</label>
                                         <input type="checkbox" class="custom-control-input" id="sold" name="sold" {{ $mobilHome->on_sale ? 'checked' : '' }}>
                                     </div>
+                                    @if ($mobilHome->on_sale)
+                                        <input type="hidden" name="available" value="0">
+                                    @elseif (!$mobilHome->on_sale)
+                                        <input type="hidden" name="available" value="1">
+                                    @endif
                                 </div>
                             </div>
 
