@@ -32,26 +32,83 @@ class AdminController extends Controller
         return view('admin.new-mobilhome');
     }
 
+    public function updateMobilHome($id){
+        $mobilHome = MobilHome::findOrFail($id);
+        return view('admin.edit-mobilhome', compact('mobilHome'));
+    }
+
     public function editMobilHome(Request $request, $id)
     {
         $mobilHome = MobilHome::findOrFail($id);
-        $mobilHome->update($request->all());
-        
+        $mobilHome->fill($request->all());
+        $discount_percentage = $mobilHome->discount_percentage ?? 0;
+
+        if ($mobilHome->discount_percentage !== null && $mobilHome->discount_percentage !== 0) {
+            $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $mobilHome->discount_percentage / 100);
+        } else {
+            $mobilHome->discounted_price = null;
+        }
+
         if ($request->has('discount')) {
             $discount = $request->discount;
-            $mobilHome->discount_percentage = ($discount * 100);
-            $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount);
+            if ($mobilHome->discount_percentage !== null && $discount !== $mobilHome->discount_percentage / 100) {
+                // El porcentaje de descuento ha cambiado, recalcular el precio descontado
+                $mobilHome->discount_percentage = $discount * 100;
+                $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount);
+            } elseif ($mobilHome->discount_percentage === null) {
+                // No había un porcentaje de descuento registrado previamente
+                $mobilHome->discount_percentage = null;
+                $mobilHome->discounted_price = null;
+            }
+            
         } else {
+            // No se ha seleccionado un porcentaje de descuento
             $mobilHome->discount_percentage = null;
-            $mobilHome->discounted_price = null;
+            if ($mobilHome->discount_percentage === null || $mobilHome->discount_percentage === 0 ) {
+                $mobilHome->discounted_price = null;
+            } else {
+                $mobilHome->discounted_price = $mobilHome->price;
+            }
         }
         
         $mobilHome->on_sale = $request->has('sold');
+
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                // Obtener el nombre de archivo original
+                $filename = $image->getClientOriginalName();
+
+                // Almacenar la imagen en el sistema de archivos
+                //$path = $image->storeAs('mobilhome_images', uniqid() . '-' . $filename);
+                $path = $image->storeAs('mobilhome_images', $filename, 'public');
+
+                // Obtener la ruta completa de la imagen almacenada
+                $fullPath = 'mobilhome_images/' . basename($path);
+
+                // Crear una nueva fila en la tabla mobil_home_images
+                $mobilhomeImage = new MobilHomeImage;
+                $mobilhomeImage->mobil_home_id = $mobilHome->id;
+                $mobilhomeImage->image_path = $fullPath;
+                $mobilhomeImage->save();
+            }
+        }
+        if ($request->has('images')) {
+            foreach ($request->input('images') as $imageId) {
+                $image = MobilHomeImage::findOrFail($imageId);
+                Storage::delete($image->image_path);
+                $image->delete();
+            }
+        }
+
         $mobilHome->save();
-        
-        return view('admin.edit-mobilhome', compact('mobilHome'));
+
+        return redirect()->route('admin.view-mobilhome')->with('success', 'The mobile home has been satisfactorily modified.');
     }
-    
+
+
+
+    /*
     public function deleteMobilHomeImage($id, $imageId)
     {
         $mobilHome = MobilHome::findOrFail($id);
@@ -68,8 +125,8 @@ class AdminController extends Controller
         // Eliminar entrada de imagen de la base de datos
         $image->delete();
 
-        return redirect()->route('admin.edit-mobilhome', $mobilHome->id)->with('success', 'The image has been successfully removed.');
-    }
+        return redirect()->route('admin.view-mobilhome', $mobilHome->id)->with('success', 'The image has been successfully removed.');
+    }*/
 
 
 

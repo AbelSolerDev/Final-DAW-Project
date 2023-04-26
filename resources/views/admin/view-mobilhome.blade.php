@@ -37,9 +37,10 @@
                     <th style="width: 15%;">Name</th>
                     <th style="width: 30%;">Description</th>
                     <th style="width: 10%;">Price</th>
+                    <th style="width: 5%;">%</th>
+                    <th style="width: 20%;">Price with Discount</th>
                     <th style="width: 10%;">Available</th>
-                    <th style="width: 10%;">Discounted Price</th>
-                    <th style="width: 10%;">On Sale</th>
+                    <th style="width: 10%;">Sold</th>
                     <th style="width: 10%;">Actions</th>
                 </tr>
             </thead>
@@ -51,13 +52,22 @@
                         <td>{{ $mobilHome->name }}</td>
                         <td>{{ Str::limit($mobilHome->description, $limit = 40, $end = '...') }}</td> 
                         <td>{{ $mobilHome->price }}&euro;</td>
+                        <td>
+                            @if(isset($mobilHome->discount_percentage))
+                                {{ $mobilHome->discount_percentage }}%
+                            @endif
+                        </td>
+                        <td>
+                            @if(isset($mobilHome->discounted_price))
+                                {{ $mobilHome->discounted_price }}&euro;
+                            @endif
+                        </td>
                         <td>{{ $mobilHome->available ? 'Yes' : 'No' }}</td>
-                        <td>{{ $mobilHome->discounted_price }}&euro;</td>
                         <td>{{ $mobilHome->on_sale ? 'Yes' : 'No' }}</td>
                         <td>
                             <div class="btn-group">
                                 <a href="{{ route('sale.show', $mobilHome) }}" class="btn btn-info">Show</a>
-                                <a href="{{ route('admin.editMobilHome', $mobilHome) }}" class="btn btn-warning">Edit</a>
+                                <a href="{{ route('admin.updateMobilHome', $mobilHome) }}" class="btn btn-warning">Edit</a>
                                 <form action="{{ route('admin.deleteMobilHome', $mobilHome->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this mobil home?');">
                                     @csrf
                                     @method('DELETE')
@@ -70,6 +80,12 @@
             </tbody>
         </table>
     </div>
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
 
 
 @endsection

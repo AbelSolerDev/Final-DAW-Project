@@ -8,14 +8,14 @@
                     <div class="card-body">
                         <form action="{{ route('admin.editMobilHome', $mobilHome->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
+                            <input type="hidden" name="_method" value="PUT">
+                            <!--@method('PUT')-->
                             <div class="row mb-3">
                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
                                 <div class="col-md-6">
                                     <input id="name" type="text" class="form-control" name="name" value="{{ $mobilHome->name }}" required autofocus>
                                 </div>
                             </div>
-
                             <div class="row mb-3">
                                 <label for="description" class="col-md-4 col-form-label text-md-end">{{ __('Description') }}</label>
                                 <div class="col-md-6">
@@ -25,60 +25,76 @@
                             <div class="row mb-3">
                                 <label for="price" class="col-md-4 col-form-label text-md-end">{{ __('Price') }}</label>
                                 <div class="col-md-6">
-                                    <input id="price" type="number" step="0.01" class="form-control" name="price" value="{{ $mobilHome->discounted_price ?? $mobilHome->price }}" required>
+                                    <input id="price" type="number" step="0.01" class="form-control" name="price" value="{{ $mobilHome->price }}" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <label for="price" class="col-md-4 col-form-label text-md-end">{{ __('Discounted Price') }}</label>
+                                <div class="col-md-6">
+                                    <input id="discounted_price" type="number" step="0.01" class="form-control" name="price" value="{{ $mobilHome->discounted_price !== null ? $mobilHome->discounted_price : '' }}" disabled required>
+                                </div>
+                            </div>
+
+
+                            <div class="row mb-3">
                                 <label for="discount" class="col-md-4 col-form-label text-md-end">{{ __('Discount') }}</label>
                                 <div class="col-md-6">
-                                    <select id="discount" name="discount">
-                                        <option value="" selected>No discount</option>
-                                        <option value="0.05">5% discount</option>
-                                        <option value="0.10">10% discount</option>
-                                        <option value="0.15">15% discount</option>
-                                        <option value="0.20">20% discount</option>
-                                        <option value="0.25">25% discount</option>
-                                        <option value="0.30">30% discount</option>
-                                        <option value="0.35">35% discount</option>
-                                        <option value="0.40">40% discount</option>
-                                        <option value="0.45">45% discount</option>
-                                        <option value="0.50">50% discount</option>
-                                        <option value="0.55">55% discount</option>
-                                        <option value="0.60">60% discount</option>
-                                        <option value="0.65">65% discount</option>
-                                        <option value="0.70">70% discount</option>
-                                        <option value="0.75">75% discount</option>
-                                        <option value="0.80">80% discount</option>
-                                        <option value="0.85">85% discount</option>
-                                        <option value="0.90">90% discount</option>
-                                        <option value="0.95">95% discount</option>
-                                    </select>
-                                    <div class="form-check mb-3">
-                                        <input type="checkbox" class="form-check-input" id="sold" name="sold" {{ $mobilHome->on_sale ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="sold">{{ __('On Sale') }}</label>
+                                <select id="discount" name="discount" onchange="clearDiscountedPriceError()">
+                                    <option value="" {{ $mobilHome->discount_percentage === null ? 'selected' : '' }}>No discount</option>
+                                    @for ($i = 5; $i <= 95; $i += 5)
+                                        @php
+                                            $selected = ($mobilHome->discount_percentage !== null && $mobilHome->discount_percentage == $i) || ($mobilHome->discount_percentage === null && $i == 5);
+                                        @endphp
+                                        <option value="{{ $i }}" {{ $selected ? 'selected' : '' }}>{{ $i }}% discount</option>
+                                    @endfor
+                                </select>
+
+
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 col-form-label text-md-end">
+                                    <div class="custom-control custom-checkbox">
+                                        <label class="custom-control-label" for="sold">{{ __('On Sale') }} = Sold</label>
+                                        <input type="checkbox" class="custom-control-input" id="sold" name="sold" {{ $mobilHome->on_sale ? 'checked' : '' }}>
                                     </div>
                                 </div>
                             </div>
+
+                            <hr>
                             <div class="form-group">
                                 <label for="images">Images</label>
                                 <input type="file" name="images[]" multiple>
                             </div>
-
-                            @if ($mobilHome->images->count() > 0)
-                                <h4>Existing images:</h4>
-                                <ul>
+                            <hr>
+                            <table>
+                                <thead>
+                                    <div class="text-center">
+                                        <h4>Existing images:</h4>
+                                    </div>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Select to Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @if($mobilHome->images !== null)
                                     @foreach ($mobilHome->images as $image)
-                                        <li>
-                                            <img src="{{ $image->image_path ? '/storage/' . $image->image_path : '/storage/mobilhome_images/default.jpg' }}" class="img-fluid thumbnail-img" alt="Photo of {{ $mobilHome->name }}">
-                                            <form action="{{ route('admin.deleteMobilHomeImage', [$mobilHome->id, $image->id]) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                        </li>
+                                        <tr>
+                                            <td>
+                                                <img 
+                                                    src="{{ $image->image_path ? '/storage/' . $image->image_path : '/storage/mobilhome_images/default.jpg' }}" 
+                                                    class="img-fluid thumbnail-img small-img" 
+                                                    alt="Photo of {{ $mobilHome->name }}"
+                                                ></td>
+                                            <td><input type="checkbox" name="images[]" value="{{ $image->id }}"></td>
+                                        </tr>
                                     @endforeach
-                                </ul>
-                            @endif
+                                @endif
+                                </tbody>
+                            </table>
+                            <hr>
+
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
@@ -97,6 +113,6 @@
             </div>
         </div>
     </div>
-    
+</div>
 
 @endsection
