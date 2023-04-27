@@ -49,7 +49,7 @@
 
         <div class="container">
             <div class="col-6">
-                <a href="{{ route('admin.view-user') }}" class="btn btn-success button-border">
+                <a href="{{ route('myaccount.index') }}" class="btn btn-success button-border">
                     back
                 </a>
             </div>
