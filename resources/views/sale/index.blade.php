@@ -127,7 +127,7 @@
             </div>
             @endif
         @endforeach
-
+    @endif
     <!-- MOBILHOME VENDIDOS -->
         @foreach ($mobilHomes->items() as $mobilHome)
             @php
@@ -147,10 +147,6 @@
                         <p class="card-text">{{ Str::limit($mobilHome->description, $limit = 100, $end = '...') }}</p>
                         <hr>
                         <p class="card-text text-right">
-                        @if (!Auth::check() && $mobilHome->on_sale)
-                            <span class="text-danger font-weight-bold; font-size:100px;">SOLD</span>
-                        @endif
-                        @if (Auth::check())
                             @if ($mobilHome->on_sale)
                                 <span class="text-danger font-weight-bold; font-size:100px;">SOLD</span>
                             @elseif (round($mobilHome->discount_percentage, 0) > 1 || $mobilHome->discounted_price > 1)
@@ -162,7 +158,6 @@
                             @else
                                 <span>{{ $mobilHome->price }}&euro;</span>
                             @endif
-                        @endif
                         </p>
                         <p>
                             @if ($mobilHome->available)
@@ -190,7 +185,7 @@
             </div>
             @endif
         @endforeach
-    @endif
+
 
         <div class="d-flex justify-content-center">
         {{ $mobilHomes->onEachSide(3)->links() }}
