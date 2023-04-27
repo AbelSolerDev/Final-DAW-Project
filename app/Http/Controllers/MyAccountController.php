@@ -51,7 +51,7 @@ class MyAccountController extends Controller
         $user = Auth::user();
         $user->delete();
         Auth::logout();
-        return redirect()->route('home')->with('success', 'Account deleted successfully.');
+        return redirect()->route('welcome')->with('success', 'Account deleted successfully.');
     }
 }
 

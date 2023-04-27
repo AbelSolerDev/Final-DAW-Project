@@ -132,6 +132,16 @@ body {
     font-size: 20px;
     margin-bottom: 20px;
 }
+.btn-special {
+    background-color: turquoise;
+    border-color: turquoise;
+}
+
+.btn-special:hover {
+    background-color: #2b2d42;
+    border-color: #2b2d42;
+    color: turquoise;
+}
 
 .thumbnail-img {
     width: 100%;

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\MobilHome;
 use App\Models\MobilHomeImage;
-use App\Models\Promotion;
+use App\Models\Sale;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -44,6 +44,7 @@ class AdminController extends Controller
         $mobilHome->fill($request->all());
         $discount_percentage = $mobilHome->discount_percentage ?? 0;
         $discounted_price = $mobilHome->discounted_price ?? null;
+        
 
         if (round($discount_percentage, 0) === 0) {
             // Mantener el valor actual de discounted_price si discount_percentage es 0
@@ -60,26 +61,15 @@ class AdminController extends Controller
                 // El porcentaje de descuento ha cambiado, recalcular el precio descontado
                 $mobilHome->discount_percentage = $discount * 100;
                 $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount / 100);
-                // Crear o actualizar un registro en la tabla "promotions"
-                $promotion = Promotion::where('mobil_home_id', $mobilHome->id)->first();
-                if (!$promotion) {
-                    $promotion = new Promotion();
-                    $promotion->mobil_home_id = $mobilHome->id;
-                }
-                $promotion->save();
+                
             } elseif ($discount_percentage === null || $discount_percentage === 0 ) {
                 // No había un porcentaje de descuento registrado previamente
                 $mobilHome->discount_percentage = $discount * 100;
                 $mobilHome->discounted_price = $mobilHome->price - ($mobilHome->price * $discount / 100);
-                 // Crear un registro en la tabla "promotions"
-                $promotion = new Promotion();
-                $promotion->mobil_home_id = $mobilHome->id;
-                $promotion->save();
+
             } elseif (round($discount_percentage, 0) === 0 && empty($discount)) {
                 // Se ha seleccionado "No discount", borrar el valor de discounted_price
-                $mobilHome->discounted_price = $mobilHome->price;
-                 // Eliminar un registro en la tabla "promotions"
-                Promotion::where('mobil_home_id', $mobilHome->id)->delete();
+                $mobilHome->discounted_price = null;
             }
             // Nueva condición para establecer el valor de discounted_price en 0 si es igual a price
             if (round($mobilHome->discounted_price, 2) === round($mobilHome->price, 2)) {
@@ -90,14 +80,10 @@ class AdminController extends Controller
             $mobilHome->discount_percentage = null;
             if ($discount_percentage === null) {
                 $mobilHome->discounted_price = null;
-                // Eliminar un registro en la tabla "promotions"
-                 Promotion::where('mobil_home_id', $mobilHome->id)->delete();
             }
             // Nueva condición para establecer el valor de discounted_price en 0 si es igual a price
             if (round($mobilHome->discounted_price, 2) === round($mobilHome->price, 2)) {
                 $mobilHome->discounted_price = 0;
-                // Eliminar un registro en la tabla "promotions"
-                Promotion::where('mobil_home_id', $mobilHome->id)->delete();
             }
         }
         //volver al porcentaje original en unidades para poder guardarlo en la base de datos
@@ -115,8 +101,17 @@ class AdminController extends Controller
                 $mobilHome->available = 1;
             }
         }
-        
-
+        // GESTIÓN DE VENTA
+        if ($mobilHome->on_sale == 1 && !$oldOnSale) {
+            $sale = new Sale();
+            $sale->mobil_home_id = $mobilHome->id;
+            $sale->save();
+        } elseif ($mobilHome->on_sale == 0 && $oldOnSale) {
+            $sale = Sale::where('mobil_home_id', $mobilHome->id)->first();
+            if ($sale) {
+                $sale->delete();
+            }
+        }
         // GESTIÓN DE IMAGENES //
         if ($request->hasFile('images')) {
             $images = $request->file('images');
@@ -148,11 +143,11 @@ class AdminController extends Controller
             }
         }
         $mobilHome->save();
-        $promotion->save();
+        
         return redirect()->route('admin.view-mobilhome')->with('success', 'The mobile home has been satisfactorily modified.');
     }
-
-
+    
+     /*ELIMINAR MOBILHOME*/
     public function deleteMobilHome($id)
     {
         $mobilHome = MobilHome::findOrFail($id);
@@ -160,7 +155,7 @@ class AdminController extends Controller
         return redirect()->route('admin.view-mobilhome')->with('success', 'MobilHome deleted successfully.');
     }
     
-    
+    /*CREAR MOBILHOME*/
     public function storeMobilHome(Request $request)
     {
         // Validar el formulario

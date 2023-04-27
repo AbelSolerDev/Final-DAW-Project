@@ -51,7 +51,6 @@ Route::put('/admin/edit-mobilhome/{id}', [\App\Http\Controllers\AdminController:
 Route::delete('/admin/mobilhome/{id}', [\App\Http\Controllers\AdminController::class, 'deleteMobilHome'])->name('admin.deleteMobilHome');
 
 
-
     /*ADMINITRACIÓN USUARIOS*/
 Route::match(['get', 'delete'], '/admin/view-user', 'App\Http\Controllers\AdminController@viewUser')->name('admin.view-user');
 Route::get('admin/new-user', [\App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.createUser');
@@ -65,15 +64,3 @@ Route::get('myaccount', [\App\Http\Controllers\MyAccountController::class, 'inde
 Route::get('/myaccount/edit', [\App\Http\Controllers\MyAccountController::class, 'editUser'])->name('myaccount.editUser');
 Route::put('/myaccount/update/{id}', [\App\Http\Controllers\MyAccountController::class, 'updateUser'])->name('myaccount.updateUser');
 Route::delete('/myaccount/delete', [\App\Http\Controllers\MyAccountController::class, 'deleteUser'])->name('myaccount.deleteUser');
-
-
-
-/*
-Si el usuario esta registrado podrá ver el contenido
-middleware('auth')
-        Route::get('profile', function () {
-            // Only authenticated users may enter...
-        })->middleware('auth.basic');
-*/
-
-

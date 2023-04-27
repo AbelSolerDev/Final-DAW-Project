@@ -51,7 +51,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-4 col-form-label text-md-end">
                                     <div class="custom-control custom-checkbox">
-                                        <label class="custom-control-label" for="sold">{{ __('On Sale') }} = Sold</label>
+                                        <label class="custom-control-label" for="sold">{{ __('On Sale') }}/Sold</label>
                                         <input type="checkbox" class="custom-control-input" id="sold" name="sold" {{ $mobilHome->on_sale ? 'checked' : '' }}>
                                     </div>
                                     @if ($mobilHome->on_sale)

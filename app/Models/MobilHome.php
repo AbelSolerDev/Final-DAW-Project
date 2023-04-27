@@ -41,9 +41,5 @@ class MobilHome extends Model
         return $this->hasMany(Sale::class);
     }
 
-    public function promotions()
-    {
-        return $this->hasMany(Promotion::class);
-    }
 }
 
