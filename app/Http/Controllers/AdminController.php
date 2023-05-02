@@ -151,6 +151,13 @@ class AdminController extends Controller
     public function deleteMobilHome($id)
     {
         $mobilHome = MobilHome::findOrFail($id);
+
+        // Elimina todas las filas relacionadas en la tabla "sales"
+        foreach ($mobilHome->sales as $sale) {
+            $sale->delete();
+        }
+
+        // Elimina el "MobilHome"
         $mobilHome->delete();
         return redirect()->route('admin.view-mobilhome')->with('success', 'MobilHome deleted successfully.');
     }

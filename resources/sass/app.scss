@@ -12,6 +12,7 @@ main {
     min-height: calc(100vh - 60px); /* altura del footer */
     display: flex;
     flex-direction: column;
+    margin-bottom: 30px;
 }
 
 /* asegurarse de que el main se extienda tanto como sea posible */

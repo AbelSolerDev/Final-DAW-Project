@@ -19,7 +19,7 @@ class SaleController extends Controller
                                 ->where('available', true)
                                 ->orWhere('available', false)
                                 ->orderBy('created_at', 'desc')
-                                ->simplePaginate(12);
+                                ->simplePaginate(16); //Productos por página
 
         return view('sale.index', compact('title', 'description', 'description2', 'mobilHomes'));
     }

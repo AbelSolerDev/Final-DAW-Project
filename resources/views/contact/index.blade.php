@@ -12,11 +12,12 @@
     <div class="container">
         <div class="row">
             <div class="contact__form text-center">
-                <form action="#" method="#" class="contact__form-container" style="max-width: 500px; margin: 0 auto;">
+                
                     <p class="contact__form-description">Do you have any questions or comments for us? We would love 
                         to hear from you! Whether you're interested in one of our Mobile Homes, have a general query or 
                         just want to say hello, we're here to listen.
                     </p>
+                    <!--<form action="#" method="#" class="contact__form-container" style="max-width: 500px; margin: 0 auto;">
                     <div class="form-group">
                         <input type="text" class="form-control" name="name" placeholder="Name">
                     </div>
@@ -30,7 +31,7 @@
                         <textarea class="form-control" rows="5" name="message" placeholder="Message"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Send</button>
-                </form>
+                </form>-->
             </div>
             <div class="contact__services text-center">
             <!--<p class="contact__services-description">If you're interested in learning more about our services, 
